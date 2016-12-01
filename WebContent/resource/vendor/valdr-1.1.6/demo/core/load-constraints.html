@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Demo</title>
+</head>
+<body ng-app="demoApp">
+
+<div ng-controller="TestController">
+
+  <h1>Async Demo</h1>
+
+  <form name="demoForm" novalidate>
+
+    <div valdr-type="Person">
+
+      <div valdr-form-group ng-form>
+        <label for="lastName">Last Name</label>
+        <input type="text"
+               id="lastName"
+               name="lastName"
+               ng-model="person.lastName">
+        <span>$valid {{ demoForm.lastName.$valid }}</span>
+      </div>
+
+      <div valdr-form-group>
+        <label for="firstName">First Name</label>
+        <input type="text"
+               id="firstName"
+               name="firstName"
+               ng-model="person.firstName">
+        <span>$valid {{ demoForm.firstName.$valid }}</span>
+      </div>
+
+      <div valdr-form-group>
+        <label for="zipCode">Zip Code</label>
+        <input type="text"
+               id="zipCode"
+               name="zipCode"
+               ng-model="person.zipCode">
+        <span>$valid {{ demoForm.zipCode.$valid }}</span>
+      </div>
+
+    </div>
+
+  </form>
+
+  <pre>demoForm.$valid: {{ demoForm.$valid }}</pre>
+
+  <h3>demoForm</h3>
+  <pre>{{ demoForm | json }}</pre>
+
+  <h3>constraints</h3>
+  <pre>{{ constraints | json }}</pre>
+
+</div>
+
+<script src="/bower_components/angular/angular.js"></script>
+<script src="../js/valdr.js"></script>
+<script src="http://localhost:35729/livereload.js"></script>
+
+<script>
+  var demoApp = angular.module('demoApp', ['valdr']);
+
+  demoApp.config(function(valdrProvider) {
+    valdrProvider.setConstraintUrl('/api/constraints');
+  });
+
+  demoApp.controller('TestController', function ($scope, valdr) {
+    $scope.person = {};
+
+    $scope.$watch(valdr.getConstraints, function (newConstraints) {
+      $scope.constraints = newConstraints;
+    });
+  });
+</script>
+</body>
+</html>

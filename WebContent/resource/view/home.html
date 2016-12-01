@@ -1,0 +1,40 @@
+<div class="jumbotron text-center">
+	<input type = "file" file-model = "myFile" multiple accept=".jpg,.jpeg" />
+    <button ng-click = "uploadFiles()">upload me</button> 
+    <hr>
+    User Code: 
+    <input type="text" ng-model="code" ng-init="code = '123AccNumber'">
+    <button ng-click = "checkMatchedFile()">Check Files</button> 
+    <table class="table">
+    	<tr>
+    		<td>File Name</td>
+    		<td>Decoded Url</td>
+    	</tr>
+    	<tr ng-repeat="r in resultList">
+    		<td><a href="#" ng-click="openFile(r.filename)" style="target-name:new;target-new:tab;">{{r.filename}}</a></td>
+    		<td>{{r.decodeUrl}}</td>
+    	</tr>
+    	<tr>
+    		<td colspan="2">
+    			<button ng-click = "submitFiles()">Submit Files</button> 
+    		</td>
+    	</tr>
+    </table>
+</div>
+
+<div>
+<form name="yourForm" novalidate valdr-type="Person">
+    <label for="lastName">Last Name</label>
+    <input type="text"
+           id="lastName"
+           name="lastName"
+           ng-model="person.lastName">
+
+    <label for="firstName">First Name</label>
+    <input type="text"
+           id="firstName"
+           name="firstName"
+           ng-model="person.firstName">
+</form>
+
+</div>

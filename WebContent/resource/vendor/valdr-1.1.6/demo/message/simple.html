@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Demo</title>
+
+  <style>
+    .valdr-message {
+        display: none;
+    }
+    .valdr-message.ng-invalid.ng-dirty.ng-touched, .form-submitted .valdr-message.ng-invalid {
+        display: inline;
+        background: red;
+    }
+    input.ng-invalid.ng-dirty.ng-touched, .form-submitted input.ng-invalid {
+      background: red;
+    }
+    .valdr-invalid-dirty-touched-group label, .form-submitted .form-group.ng-invalid label {
+      color: red;
+    }
+  </style>
+</head>
+<body ng-app="demoApp">
+
+<div ng-controller="TestController" ng-class="{ 'form-submitted': formSubmitted }">
+
+  <h1>Message Demo</h1>
+
+  <form name="demoForm2" novalidate>
+
+    <div valdr-type="Person">
+
+      <h4>Person</h4>
+      <div valdr-form-group>
+        <label for="lastName">Last Name</label>
+        <input type="text"
+               id="lastName"
+               name="lastName"
+               ng-model="person.lastName">
+      </div>
+
+      <div valdr-form-group>
+        <label for="firstName">First Name</label>
+        <input type="text"
+               id="firstName"
+               name="firstName"
+               ng-model="person.firstName"
+               valdr-no-message>
+        <span><em>Error message disabled for this field.</em></span>
+      </div>
+
+      <div valdr-form-group>
+        <label for="age">Age</label>
+        <input type="number"
+               id="age"
+               name="age"
+               ng-model="person.age">
+      </div>
+
+      <div valdr-form-group>
+        <label for="gender">Gender</label>
+        <select id="gender"
+                name="gender"
+                ng-options="gender as gender.label for gender in genders"
+                ng-model="person.gender">
+          <option value=""></option>
+        </select>
+      </div>
+
+      <label for="showZipCity">Show Zip/City </label>
+      <input id="showZipCity" name="showZipCity" ng-model="showZipCity" type="checkbox">
+
+      <div valdr-form-group>
+        <div ng-if="showZipCity">
+            <label for="zip">Zip / City</label>
+            <input type="text"
+               id="zip"
+               name="zip"
+               ng-model="person.zip">
+            <input type="text"
+               id="city"
+               name="city"
+               ng-model="person.city">
+        </div>
+      </div>
+
+    </div>
+
+  </form>
+
+  <button ng-click="showAllErrors()">Show all errors</button>
+
+  <h3>constraints</h3>
+  <pre>{{ constraints | json }}</pre>
+
+</div>
+
+<script src="/bower_components/angular/angular.js"></script>
+<script src="../js/valdr.js"></script>
+<script src="../js/valdr-message.js"></script>
+<script src="http://localhost:35729/livereload.js"></script>
+
+<script>
+  var demoApp = angular.module('demoApp', ['valdr']);
+
+  demoApp.config(function(valdrProvider) {
+
+    valdrProvider.addConstraints({
+      'Person': {
+        'lastName': {
+          'required': {
+            'message': 'Last name is required.'
+          },
+          'size': {
+            'min': 2,
+            'max': 10,
+            'message': 'Last name must be between 2 and 10 characters.'
+          }
+        },
+        'firstName': {
+          'size': {
+            'min': 2,
+            'max': 20,
+            'message': 'First name must be between 2 and 20 characters.'
+          }
+        },
+        'age': {
+          'min': {
+            value: '21',
+            message: 'Person must be 21 years old.'
+          }
+        },
+        'gender': {
+          'required': {
+            'message': 'Gender is required.'
+          }
+        },
+        'zip': {
+          'size': {
+              'min': 4,
+              'max': 6,
+              'message': 'ZIP must be between 4 and 6 characters.'
+          }
+        },
+        'city': {
+          'size': {
+              'min': 1,
+              'max': 10,
+              'message': 'City must be between 1 and 10 characters.'
+          }
+        }
+      }
+    });
+  });
+
+  demoApp.controller('TestController', function ($scope, valdr) {
+    $scope.person = {};
+    $scope.genders = [
+      { label: 'Male', value: 1 },
+      { label: 'Female', value: 2 }
+    ];
+    $scope.constraints = valdr.getConstraints();
+
+    $scope.showAllErrors = function () {
+        $scope.formSubmitted = true;
+    }
+  });
+</script>
+</body>
+</html>
